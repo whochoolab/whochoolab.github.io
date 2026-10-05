@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="favicon.png">
 <title>Whochoo Lab - Apps</title>
 <style>
   :root {
@@ -51,23 +52,78 @@
   .app-name { font-weight: 600; font-size: 1.05rem; }
   .app-desc { color: var(--muted); font-size: .9rem; margin-top: .35rem; }
   .app-link { color: var(--accent); font-size: .85rem; margin-top: .75rem; display: block; }
+  .brand { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+  .brand img { width: 64px; height: 64px; border-radius: 14px; image-rendering: pixelated; }
+  .brand h1 { margin: 0; }
+  .brand .sub { margin: 0; }
+  .apps { display: grid; gap: .75rem; }
+  .app { display: flex; gap: 1rem; align-items: flex-start; }
+  .app img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
+  .app-links { display: flex; gap: 1rem; margin-top: .6rem; font-size: .85rem; }
+  .app-links a { color: var(--accent); text-decoration: none; }
+  .app-links a:hover { text-decoration: underline; }
+  footer { margin-top: 3rem; color: var(--muted); font-size: .8rem; }
 </style>
 </head>
 <body>
 <main>
-  <h1>Whochoo Lab</h1>
-  <p class="sub">Android 앱을 만듭니다.</p>
+  <div class="brand">
+    <img src="img/whochoo.png" alt="Whochoo Lab">
+    <div>
+      <h1>Whochoo Lab</h1>
+      <p class="sub">고양이 후추의 이름을 딴 작은 Android 앱 스튜디오</p>
+    </div>
+  </div>
 
   <h2>앱</h2>
-  <a class="app" href="https://play.google.com/store/apps/details?id=com.hanjaejoon.TSLA4Tesla">
-    <div class="app-name">TSLA4Tesla · Stock Calculator</div>
-    <div class="app-desc">
-      테슬라 주식 수량과 평단가로 손익을 계산하고, 결과를 카드 이미지로 공유합니다.
-      6개 언어와 지역 통화 환산을 지원합니다.
+  <div class="apps">
+    <div class="app">
+      <img src="img/tsla4tesla.png" alt="">
+      <div>
+        <div class="app-name">TSLA4Tesla - Stock Calculator</div>
+        <div class="app-desc">테슬라 주식 수량과 평단가로 손익을 계산하고, 결과를 카드 이미지로 공유합니다. 6개 언어와 지역 통화 환산을 지원합니다.</div>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.hanjaejoon.TSLA4Tesla">Google Play</a>
+          <a href="https://jjester.tistory.com/175">개인정보처리방침</a>
+        </div>
+      </div>
     </div>
-    <span class="app-link">Google Play에서 보기</span>
-  </a>
+    <div class="app">
+      <img src="img/loan-calculator.png" alt="">
+      <div>
+        <div class="app-name">대출 상환 계산기</div>
+        <div class="app-desc">원리금균등/원금균등/만기일시를 한 번에 비교. 월 상환액과 총 이자를 바로 확인.</div>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.hanjaejoon.loancalculator">Google Play</a>
+          <a href="loan-calculator-privacy/">개인정보처리방침</a>
+        </div>
+      </div>
+    </div>
+    <div class="app">
+      <img src="img/haruhana.png" alt="">
+      <div>
+        <div class="app-name">하루하나</div>
+        <div class="app-desc">올해 목표 하나와 오늘의 하나만. 연속 기록도 점수도 없는 조용한 일일 체크.</div>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.hanjaejoon.haruhana">Google Play</a>
+          <a href="haruhana-privacy/">개인정보처리방침</a>
+        </div>
+      </div>
+    </div>
+    <div class="app">
+      <img src="img/brick-rogue.png" alt="">
+      <div>
+        <div class="app-name">브릭 로그 - 벽돌깨기 RPG</div>
+        <div class="app-desc">조준하고 발사하는 벽돌깨기에 로그라이트 강화를 얹은 볼 게임. 오프라인 플레이.</div>
+        <div class="app-links">
+          <a href="https://play.google.com/store/apps/details?id=com.hanjaejoon.brickrogue">Google Play</a>
+          <a href="brick-rogue-privacy/">개인정보처리방침</a>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <footer>문의는 각 앱의 Google Play 스토어 등록정보에 표시된 개발자 이메일로 보내 주세요.</footer>
 </main>
 </body>
 </html>
