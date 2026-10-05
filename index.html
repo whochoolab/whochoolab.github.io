@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Whochoo Lab - Apps</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --card: #f7f7f8;
+    --border: #e5e7eb;
+    --accent: #1a56db;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111214;
+      --fg: #ececee;
+      --muted: #9ca3af;
+      --card: #1b1d21;
+      --border: #2a2d33;
+      --accent: #7aa2f7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 3rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+                 "Noto Sans KR", Roboto, sans-serif;
+    line-height: 1.6;
+  }
+  main { max-width: 640px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 2.5rem; font-size: .95rem; }
+  h2 { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em;
+       color: var(--muted); margin: 0 0 .75rem; font-weight: 600; }
+  .app {
+    display: block;
+    padding: 1.25rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: inherit;
+  }
+  .app:hover { border-color: var(--accent); }
+  .app-name { font-weight: 600; font-size: 1.05rem; }
+  .app-desc { color: var(--muted); font-size: .9rem; margin-top: .35rem; }
+  .app-link { color: var(--accent); font-size: .85rem; margin-top: .75rem; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Whochoo Lab</h1>
+  <p class="sub">Android 앱을 만듭니다.</p>
+
+  <h2>앱</h2>
+  <a class="app" href="https://play.google.com/store/apps/details?id=com.hanjaejoon.TSLA4Tesla">
+    <div class="app-name">TSLA4Tesla · Stock Calculator</div>
+    <div class="app-desc">
+      테슬라 주식 수량과 평단가로 손익을 계산하고, 결과를 카드 이미지로 공유합니다.
+      6개 언어와 지역 통화 환산을 지원합니다.
+    </div>
+    <span class="app-link">Google Play에서 보기</span>
+  </a>
+
+</main>
+</body>
+</html>

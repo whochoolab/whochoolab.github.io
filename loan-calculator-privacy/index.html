@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loan Calculator - 개인정보처리방침</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --muted: #6b7280;
+    --card: #f7f7f8;
+    --border: #e5e7eb;
+    --accent: #1a56db;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111214;
+      --fg: #ececee;
+      --muted: #9ca3af;
+      --card: #1b1d21;
+      --border: #2a2d33;
+      --accent: #7aa2f7;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 3rem 1.25rem 4rem;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo",
+                 "Noto Sans KR", Roboto, sans-serif;
+    line-height: 1.7;
+  }
+  main { max-width: 680px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 .25rem; letter-spacing: -.01em; }
+  .sub { color: var(--muted); margin: 0 0 2.5rem; font-size: .95rem; }
+  h2 { font-size: 1.05rem; margin: 2.5rem 0 .6rem; letter-spacing: -.01em; }
+  p { margin: 0 0 1rem; }
+  ul { margin: 0 0 1rem; padding-left: 1.25rem; }
+  li { margin-bottom: .35rem; }
+  a { color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: .95rem; }
+  th, td { text-align: left; padding: .6rem .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+  .note {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin: 0 0 1rem;
+  }
+  hr { border: 0; border-top: 1px solid var(--border); margin: 3.5rem 0 2.5rem; }
+  .lang-en { color: var(--fg); }
+  footer { color: var(--muted); font-size: .85rem; margin-top: 3rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Loan Calculator - 개인정보처리방침</h1>
+  <p class="sub">최종 수정: 2026-08-20 · Android 패키지 <code>com.hanjaejoon.loancalculator</code></p>
+
+  <div class="note">
+    <p style="margin:0">이 앱은 <strong>계정도 로그인도 자체 서버도 없습니다.</strong> 개발자는 이용자에 대한 어떤 데이터도 수집하거나 보관하지 않습니다.</p>
+  </div>
+
+  <h2>수집하지 않는 것</h2>
+  <p>입력한 대출 원금, 이율, 기간은 <strong>기기에서만</strong> 계산에 쓰입니다. 어디로도 전송되지 않으며 개발자는 이 값을 볼 수 없습니다. 마지막 입력값은 다음에 앱을 열 때 화면을 복원하기 위해 기기 내부 저장 공간에만 저장되며, 앱을 삭제하면 함께 지워집니다.</p>
+  <p>이름, 이메일 주소, 전화번호, 연락처, 정확한 위치, 사진, 파일을 수집하지 않습니다.</p>
+
+  <h2>광고</h2>
+  <p>이 앱은 <strong>Google AdMob</strong>을 통해 배너 광고를 표시합니다. 광고 게재를 위해 Google이 다음을 수집하고 처리할 수 있습니다.</p>
+  <ul>
+    <li>기기의 광고 ID</li>
+    <li>IP 주소, 기기 모델, 운영체제 버전, 그리고 이로부터 추정되는 대략적 위치(국가 또는 지역 수준)</li>
+    <li>노출수, 클릭 등 광고 상호작용 기록</li>
+  </ul>
+  <p>개발자는 이 과정에서 광고 ID나 개인을 식별할 수 있는 데이터를 받지 않습니다. Google은 광고를 통해 수집하는 데이터에 대해 독립적인 데이터 관리자로서 행위합니다.</p>
+  <p>Google의 데이터 처리 방식은 <a href="https://policies.google.com/privacy">Google 개인정보처리방침</a>과 <a href="https://policies.google.com/technologies/partner-sites">Google 서비스를 사용하는 사이트나 앱에서 수집한 정보를 Google이 사용하는 방법</a>에 설명되어 있습니다.</p>
+  <p>광고 ID는 Android 기기의 <strong>설정 &gt; Google &gt; 광고</strong>에서 언제든지 재설정하거나 삭제할 수 있습니다. 같은 화면에서 맞춤 광고를 거부할 수도 있습니다.</p>
+
+  <h2>앱이 요청하는 권한</h2>
+  <table>
+    <tr><th>권한</th><th>이유</th></tr>
+    <tr><td>인터넷 접근</td><td>배너 광고를 불러오기 위해 필요합니다. 계산 기능 자체는 오프라인에서 동작합니다</td></tr>
+    <tr><td>사진 저장</td><td>"이미지 저장"을 눌렀을 때만 요청하며, 결과 카드를 갤러리에 저장하는 용도입니다. 기존 사진을 읽지 않습니다</td></tr>
+  </table>
+  <p>사진 권한은 저장 기능을 사용하는 시점에 요청되며, 거부하면 그 버튼만 동작하지 않습니다.</p>
+
+  <h2>아동</h2>
+  <p>이 앱은 아동을 대상으로 하지 않습니다. 일반 이용자를 위한 금융 계산기이며, 개발자는 아동의 데이터를 고의로 수집하지 않습니다.</p>
+
+  <h2>데이터 보관과 삭제</h2>
+  <p>개발자가 보관하는 이용자 데이터가 없으므로 삭제를 요청할 대상도 없습니다. 저장된 입력값은 기기에만 있으며 앱을 삭제하거나 <strong>설정 &gt; 애플리케이션 &gt; Loan Calculator &gt; 저장공간 &gt; 데이터 삭제</strong>로 지울 수 있습니다.</p>
+  <p>Google이 광고를 통해 수집한 데이터에 대해서는 위에 링크한 Google 정책을 참고하세요.</p>
+
+  <h2>금융 자문이 아닙니다</h2>
+  <p>앱이 보여주는 결과는 참고용 추정치입니다. 실제 대출 상품은 취급 수수료, 보증료, 중도상환수수료, 이자 계산의 일수 기준 등에 따라 금융기관이 안내하는 금액과 차이가 날 수 있습니다. 이 앱은 대출을 제공하거나 중개하지 않습니다.</p>
+
+  <h2>방침 변경</h2>
+  <p>이 방침이 바뀌면 같은 주소에 수정일을 갱신해 게시합니다.</p>
+
+  <h2>문의</h2>
+  <p>이 방침에 대한 문의는 Google Play 스토어 등록정보에 표시된 개발자 지원 이메일로 연락해 주세요.</p>
+
+  <hr>
+
+  <div class="lang-en">
+    <h1>Loan Calculator - Privacy Policy</h1>
+    <p class="sub">Last updated: 2026-08-20 · Android package <code>com.hanjaejoon.loancalculator</code></p>
+
+    <div class="note">
+      <p style="margin:0">This app has <strong>no account, no login and no server of its own.</strong> The developer collects and stores no data about you.</p>
+    </div>
+
+    <h2>What the app does not collect</h2>
+    <p>The loan amounts, interest rates and terms you type are used only to calculate results <strong>on your device</strong>. They are never transmitted, and the developer never receives them. Your last inputs are saved in the app's private storage on your device so the screen is restored next time you open it. Uninstalling the app deletes them.</p>
+    <p>The app does not collect your name, email address, phone number, contacts, precise location, photos or files.</p>
+
+    <h2>Advertising</h2>
+    <p>The app shows banner ads through <strong>Google AdMob</strong>. To serve ads, Google may collect and process:</p>
+    <ul>
+      <li>your device's advertising ID</li>
+      <li>IP address, device model, operating system version, and coarse (country or region level) location derived from those</li>
+      <li>ad interactions such as impressions and clicks</li>
+    </ul>
+    <p>The developer does not receive your advertising ID or any personally identifying data from this. Google acts as an independent data controller for the data it collects through ads. See the <a href="https://policies.google.com/privacy">Google Privacy Policy</a> and <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use our services</a>.</p>
+    <p>You can reset or delete your advertising ID at any time in <strong>Settings &gt; Google &gt; Ads</strong> on your Android device. The same screen lets you opt out of ad personalisation.</p>
+
+    <h2>Permissions the app requests</h2>
+    <table>
+      <tr><th>Permission</th><th>Why</th></tr>
+      <tr><td>Internet access</td><td>Required to load banner ads. The app's calculations work offline</td></tr>
+      <tr><td>Photo library write access</td><td>Only requested when you tap "Save image" to store a result card in your gallery. The app never reads existing photos</td></tr>
+    </table>
+
+    <h2>Children</h2>
+    <p>The app is not directed at children. It is a financial calculator intended for a general audience. The developer does not knowingly collect any data from children.</p>
+
+    <h2>Data retention and deletion</h2>
+    <p>The developer stores no data about you, so there is nothing to request deletion of. Your saved inputs live only on your device and are removed when you uninstall the app or clear its storage (<strong>Settings &gt; Apps &gt; Loan Calculator &gt; Storage &gt; Clear data</strong>).</p>
+
+    <h2>Not financial advice</h2>
+    <p>Results shown by the app are estimates for reference. Real loan products can differ because of origination fees, guarantee fees, early repayment penalties and interest day-count conventions. The app does not offer, broker or arrange loans.</p>
+
+    <h2>Changes to this policy</h2>
+    <p>If this policy changes, the updated version will be published at this same address with a new "Last updated" date.</p>
+
+    <h2>Contact</h2>
+    <p>For questions about this policy, please use the developer support email shown on the app's Google Play store listing.</p>
+  </div>
+
+  <footer>
+    <a href="/">← Whochoo Lab</a>
+  </footer>
+</main>
+</body>
+</html>
