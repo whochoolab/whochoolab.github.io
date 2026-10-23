@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-10-23",
+  "fees": {
+    "upbitTradeFeePercent": 0.05,
+    "upbitBtcWithdrawBtc": 0.0002,
+    "upbitUsdtWithdrawUsdt": 0,
+    "bithumbTradeFeePercent": 0.04,
+    "bithumbBtcWithdrawBtc": 0.0002,
+    "bithumbUsdtWithdrawUsdt": 0,
+    "binanceBuyFeePercent": 0.1,
+    "binanceLightningFeeBtc": 0.000001,
+    "binanceLightningMaxBtc": 0.01,
+    "binanceOnchainFeeBtc": 0.00002
+  },
+  "usdtNetwork": {
+    "upbit": "TRC20",
+    "bithumb": "TRC20"
+  }
+}
