@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<link rel="icon" href="../../favicon.png">
+<title>테슬라 합병 양도세 계산기 (매수 환율 반영)</title>
+<meta name="description" content="테슬라-스페이스X 합병으로 주식이 교환되면 팔지 않아도 해외주식 양도세 22%가 나올 수 있다. 매수 당시 환율까지 반영해 예상 세금을 계산한다.">
+<meta property="og:title" content="테슬라 합병 양도세 계산기 (매수 환율 반영)">
+<meta property="og:description" content="팔지 않아도 나오는 양도세, 매수 당시 환율까지 넣어 계산해 보자.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#eef2ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141816" media="(prefers-color-scheme: dark)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #eef2ef;
+    --sheet: #f9fbf9;
+    --ink: #1c2420;
+    --muted: #5f6b65;
+    --rule: #2f6b4f;
+    --rule-soft: #b9cdc2;
+    --stamp: #c0362c;
+    --focus: #1f5fbf;
+    color-scheme: light dark;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #141816;
+      --sheet: #1b201d;
+      --ink: #e4ebe7;
+      --muted: #97a39d;
+      --rule: #74b394;
+      --rule-soft: #34453c;
+      --stamp: #f2796d;
+      --focus: #8fb6ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 1rem/1.65 "IBM Plex Sans KR", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+  main { max-width: 34rem; margin: 0 auto; padding: 2.25rem 1rem 3rem; }
+
+  h1 { font-size: 1.6rem; line-height: 1.3; font-weight: 700; margin: 0 0 .5rem; letter-spacing: -.02em; }
+  .lede { margin: 0 0 2rem; color: var(--muted); }
+
+  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 1.1rem; }
+  legend { font-weight: 700; margin-bottom: .9rem; padding: 0; }
+  .row { display: grid; gap: .3rem; }
+  .row > label { font-weight: 600; }
+  .hint { color: var(--muted); font-size: .85rem; margin: 0; }
+  .box {
+    display: flex; align-items: baseline; gap: .5rem;
+    border-bottom: 2px solid var(--rule);
+    padding: .15rem 0 .2rem;
+  }
+  .box:focus-within { border-bottom-color: var(--focus); }
+  .box input {
+    flex: 1; min-width: 0; border: 0; background: transparent; color: var(--ink);
+    font-family: inherit; font-size: 1.35rem; font-weight: 600; line-height: 1.3;
+    font-variant-numeric: tabular-nums;
+    padding: .2rem 0; outline: none;
+  }
+  .box input::placeholder { color: var(--rule-soft); font-weight: 400; }
+  .box .unit { color: var(--muted); }
+
+  .slip {
+    margin: 2.25rem 0 0;
+    background: var(--sheet);
+    border: 2px solid var(--rule);
+    padding: 1.1rem 1rem 1.2rem;
+  }
+  .slip-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    border-bottom: 1px solid var(--rule); padding-bottom: .5rem; margin-bottom: 1rem;
+    color: var(--rule); font-weight: 700;
+  }
+  .slip-head small { font-weight: 400; color: var(--muted); font-size: .8rem; }
+  .digits { display: flex; flex-wrap: wrap; align-items: flex-end; gap: .2rem; min-height: 3.2rem; }
+  .digits span {
+    display: grid; place-items: center;
+    inline-size: 1.9rem; block-size: 2.7rem;
+    border: 1px solid var(--rule-soft);
+    color: var(--stamp); font-size: 1.7rem; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  .digits span.sep { inline-size: auto; border: 0; padding: 0 .05rem; }
+  .digits.empty span { color: var(--rule-soft); }
+  .digits .won { inline-size: auto; border: 0; color: var(--ink); font-size: 1.1rem; font-weight: 600; padding-left: .25rem; }
+  .status { margin: .9rem 0 0; }
+  .status p { margin: .25rem 0 0; }
+  .status .fx { font-weight: 600; }
+
+  .scenario { margin-top: 1.5rem; display: grid; gap: .4rem; }
+  .scenario-top { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+  .scenario-top label { font-weight: 600; }
+  .scenario-top .box { inline-size: 7.5rem; border-bottom-width: 1px; }
+  .scenario-top .box input { font-size: 1.1rem; text-align: right; }
+  input[type="range"] {
+    --track: .375rem; --thumb: 1.5rem;
+    --fill: var(--rule); --rest: var(--rule-soft);
+    --min: 100; --max: 1000; --val: 400;
+    --pct: calc((var(--val) - var(--min)) / (var(--max) - var(--min)) * 100%);
+    appearance: none; inline-size: 100%; block-size: 2.75rem;
+    margin: 0; padding: 0; border: 0; background: transparent; cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-runnable-track {
+    block-size: var(--track); border-radius: 999px;
+    background: linear-gradient(to right, var(--fill) var(--pct), var(--rest) var(--pct));
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    inline-size: var(--thumb); block-size: var(--thumb);
+    margin-block-start: calc((var(--track) - var(--thumb)) / 2);
+    border: 3px solid var(--sheet); border-radius: 50%; background: var(--fill);
+  }
+  input[type="range"]::-moz-range-track { block-size: var(--track); border-radius: 999px; background: var(--rest); }
+  input[type="range"]::-moz-range-progress { block-size: var(--track); border-radius: 999px; background: var(--fill); }
+  input[type="range"]::-moz-range-thumb {
+    inline-size: var(--thumb); block-size: var(--thumb);
+    border: 3px solid var(--sheet); border-radius: 50%; background: var(--fill);
+  }
+  input[type="range"]:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+  .scale { display: flex; justify-content: space-between; color: var(--muted); font-size: .8rem; }
+
+  details { margin-top: 1.75rem; border-top: 1px solid var(--rule-soft); padding-top: .9rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  summary:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+  details .inner { margin-top: 1rem; display: grid; gap: 1.1rem; }
+  table { inline-size: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  td { padding: .4rem 0; border-bottom: 1px solid var(--rule-soft); }
+  td:last-child { text-align: right; }
+  tr.total td { border-bottom: 0; font-weight: 700; }
+
+  .petition {
+    display: block; margin-top: 2.25rem; padding: 1rem;
+    border: 2px solid var(--ink); color: var(--ink); text-decoration: none;
+  }
+  .petition strong { display: block; font-size: 1.05rem; }
+  .petition span { color: var(--muted); font-size: .9rem; }
+  .petition:hover strong { text-decoration: underline; }
+  .petition:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+  footer { margin-top: 2rem; color: var(--muted); font-size: .82rem; }
+  footer p { margin: 0 0 .6rem; }
+  footer a { color: inherit; }
+  .sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+</style>
+</head>
+<body>
+<main>
+  <h1>테슬라 합병 양도세 계산기</h1>
+  <p class="lede">테슬라가 스페이스X 주식으로 바뀌면 팔지 않아도 판 것으로 보고 22%를 매길 수 있다. 세금은 원화로 계산하니 살 때 환율까지 넣어 본다.</p>
+
+  <form id="f" novalidate autocomplete="off">
+    <fieldset>
+      <legend>내 테슬라</legend>
+      <div class="row">
+        <label for="shares">보유 주식 수</label>
+        <div class="box"><input id="shares" inputmode="decimal" placeholder="0"><span class="unit">주</span></div>
+      </div>
+      <div class="row">
+        <label for="avg">평단가</label>
+        <div class="box"><input id="avg" inputmode="decimal" placeholder="0"><span class="unit">달러</span></div>
+      </div>
+      <div class="row">
+        <label for="buyFx">살 때 환율</label>
+        <p class="hint" id="buyFxHint">증권사 앱의 원화 매입금액을 달러 매입금액으로 나눈 값. 모르면 주로 산 해의 평균 환율</p>
+        <div class="box"><input id="buyFx" inputmode="decimal" placeholder="1,200" aria-describedby="buyFxHint"><span class="unit">원</span></div>
+      </div>
+    </fieldset>
+
+    <section class="slip" aria-labelledby="slipTitle">
+      <div class="slip-head"><span id="slipTitle">예상 양도세</span><small>지방세 포함 22%</small></div>
+      <div class="digits" id="digits" aria-hidden="true"></div>
+      <div class="status" aria-live="polite">
+        <p class="sr-only" id="srTax"></p>
+        <p id="msg"></p>
+        <p class="fx" id="fxNote"></p>
+        <p id="sellNote"></p>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-top">
+          <label for="price">합병 때 테슬라 1주</label>
+          <div class="box"><input id="price" inputmode="decimal" value="391.62" aria-describedby="priceHint"><span class="unit">달러</span></div>
+        </div>
+        <input type="range" id="priceRange" min="100" max="1000" step="1" value="392" aria-label="합병 때 테슬라 1주 가격, 달러">
+        <div class="scale" aria-hidden="true"><span>100달러</span><span>1,000달러</span></div>
+        <p class="hint" id="priceHint">2026년 10월 26일 종가 391.62달러. 합병 때 받는 새 주식의 가치로 본다</p>
+      </div>
+    </section>
+
+    <details>
+      <summary>환율, 다른 손익, 계산 내역</summary>
+      <div class="inner">
+        <div class="row">
+          <label for="mergeFx">합병일 환율</label>
+          <p class="hint" id="fxHint">최신 환율을 불러오는 중</p>
+          <div class="box"><input id="mergeFx" inputmode="decimal" value="1,320" aria-describedby="fxHint"><span class="unit">원</span></div>
+        </div>
+        <div class="row">
+          <label for="other">올해 다른 해외주식 손익</label>
+          <p class="hint" id="otherHint">이미 판 종목의 이익은 그대로, 손실은 앞에 - 를 붙인다</p>
+          <div class="box"><input id="other" inputmode="decimal" value="0" aria-describedby="otherHint"><span class="unit">원</span></div>
+        </div>
+        <table>
+          <tr><td>받는 주식 가치 (합병일 환율)</td><td id="proceeds">-</td></tr>
+          <tr><td>매수 금액 (살 때 환율)</td><td id="cost">-</td></tr>
+          <tr><td>올해 다른 손익</td><td id="otherOut">-</td></tr>
+          <tr><td>기본공제</td><td id="deduction">-</td></tr>
+          <tr class="total"><td>과세표준</td><td id="taxable">-</td></tr>
+        </table>
+      </div>
+    </details>
+  </form>
+
+  <a class="petition" href="https://petitions.assembly.go.kr/proceed/onGoingAll/5CE947CCAE0B43A2E064B49691C6967B" target="_blank" rel="noopener">
+    <strong>과세이연 국민동의청원 보기</strong>
+    <span>외국 회사끼리의 합병에도 실제로 팔 때까지 세금을 미뤄 달라는 청원. 11월 21일 마감</span>
+  </a>
+
+  <footer>
+    <p>합병 조건은 아직 정해지지 않았다. 현금이 섞이거나 구조가 달라지면 결과도 달라진다. 이 계산은 참고용 추정치이며 세무 자문이 아니다. 실제 신고는 증권사 양도세 자료로 확인한다.</p>
+    <p>입력값은 이 기기 밖으로 나가지 않는다. 환율만 공개 환율 API에서 받아 온다.</p>
+    <p><a href="https://jjester.tistory.com/">계산 방법 설명 글</a> / <a href="../../">Whochoo Lab</a></p>
+  </footer>
+</main>
+
+<script>
+  const DEDUCTION = 2500000;
+  const RATE = 0.22;
+  const $ = (id) => document.getElementById(id);
+  const won = (n) => Math.round(n).toLocaleString('ko-KR') + '원';
+  const num = (id) => {
+    const raw = $(id).value.replace(/,/g, '').trim();
+    return raw === '' ? NaN : Number(raw);
+  };
+
+  function calc({ shares, avg, buyFx, price, mergeFx, other }) {
+    const cost = shares * avg * buyFx;
+    const proceeds = shares * price * mergeFx;
+    const gain = proceeds - cost + other;
+    const deduction = Math.min(Math.max(gain, 0), DEDUCTION);
+    const taxable = Math.max(gain - DEDUCTION, 0);
+    return { cost, proceeds, deduction, taxable, tax: Math.floor(taxable * RATE) };
+  }
+
+  // 100주, 180달러 x 1,300원 -> 320달러 x 1,360원: 차익 2,012만, 세금 387만 6,400원
+  console.assert(calc({ shares: 100, avg: 180, buyFx: 1300, price: 320, mergeFx: 1360, other: 0 }).tax === 3876400);
+
+  function drawDigits(text) {
+    const el = $('digits');
+    el.replaceChildren();
+    el.classList.toggle('empty', text.includes('-'));
+    for (const ch of text) {
+      const s = document.createElement('span');
+      s.textContent = ch;
+      if (ch === ',') s.className = 'sep';
+      el.append(s);
+    }
+    const w = document.createElement('span');
+    w.className = 'won';
+    w.textContent = '원';
+    el.append(w);
+  }
+
+  function render() {
+    const v = { shares: num('shares'), avg: num('avg'), buyFx: num('buyFx'), price: num('price'), mergeFx: num('mergeFx'), other: num('other') || 0 };
+    const missing = ['shares', 'avg', 'buyFx'].filter((k) => !(v[k] > 0));
+    const bad = !(v.price >= 0 && v.mergeFx > 0) || !Number.isFinite(v.other);
+
+    if (missing.length || bad) {
+      drawDigits('-,---,---');
+      $('srTax').textContent = '';
+      $('msg').textContent = bad
+        ? '합병 때 주가와 합병일 환율에 숫자를 넣어 주세요.'
+        : '보유 주식 수, 평단가, 살 때 환율을 넣으면 여기에 금액이 찍힌다.';
+      $('fxNote').textContent = $('sellNote').textContent = '';
+      for (const id of ['proceeds', 'cost', 'otherOut', 'deduction', 'taxable']) $(id).textContent = '-';
+      return;
+    }
+
+    const r = calc(v);
+    drawDigits(r.tax.toLocaleString('ko-KR'));
+    $('srTax').textContent = `예상 양도세 ${won(r.tax)}`;
+    $('msg').textContent = r.tax > 0 ? '' : '이익이 250만 원 이하이거나 손실이라 낼 세금이 없다.';
+
+    const diff = r.tax - calc({ ...v, buyFx: v.mergeFx }).tax;
+    $('fxNote').textContent = diff > 0
+      ? `지금 환율로만 계산하면 ${won(diff)} 적게 나온다. 환율이 오른 만큼도 이익이다.`
+      : diff < 0 ? `살 때 환율이 더 높아서 지금 환율로만 계산할 때보다 ${won(-diff)} 덜 낸다.` : '';
+    const perShare = v.price * v.mergeFx;
+    $('sellNote').textContent = r.tax > 0 && perShare > 0
+      ? `세금 낼 현금을 만들려면 테슬라 약 ${Math.ceil(r.tax / perShare).toLocaleString('ko-KR')}주어치를 팔아야 한다.`
+      : '';
+
+    $('proceeds').textContent = won(r.proceeds);
+    $('cost').textContent = '-' + won(r.cost);
+    $('otherOut').textContent = (v.other > 0 ? '+' : '') + won(v.other);
+    $('deduction').textContent = '-' + won(r.deduction);
+    $('taxable').textContent = won(r.taxable);
+  }
+
+  const range = $('priceRange');
+  const syncRange = () => {
+    const p = num('price');
+    if (Number.isFinite(p)) range.value = Math.min(Math.max(p, 100), 1000);
+    range.style.setProperty('--val', range.value);
+  };
+  range.addEventListener('input', () => {
+    $('price').value = range.value;
+    range.style.setProperty('--val', range.value);
+    range.setAttribute('aria-valuetext', `${range.value}달러`);
+    render();
+  });
+  $('f').addEventListener('input', (e) => {
+    if (e.target.id === 'price') syncRange();
+    if (e.target !== range) render();
+  });
+  // 입력 중에는 커서가 튀지 않게 두고, 칸을 벗어날 때만 천 단위 쉼표를 넣는다.
+  $('f').addEventListener('focusout', (e) => {
+    const el = e.target;
+    if (el.type === 'range' || !el.inputMode) return;
+    const n = num(el.id);
+    if (Number.isFinite(n)) el.value = n.toLocaleString('ko-KR', { maximumFractionDigits: 2 });
+  });
+  syncRange();
+  render();
+
+  (async () => {
+    const urls = [
+      'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.min.json',
+      'https://latest.currency-api.pages.dev/v1/currencies/usd.min.json',
+    ];
+    for (const url of urls) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) continue;
+        const data = await res.json();
+        const krw = data?.usd?.krw;
+        if (!Number.isFinite(krw)) continue;
+        if (document.activeElement !== $('mergeFx')) $('mergeFx').value = krw.toLocaleString('ko-KR', { maximumFractionDigits: 1 });
+        $('fxHint').textContent = `${data.date} 환율을 넣어 두었다. 합병일 환율은 다를 수 있다`;
+        render();
+        return;
+      } catch { /* 다음 주소 시도 */ }
+    }
+    $('fxHint').textContent = '최신 환율을 불러오지 못했다. 직접 고쳐 넣어 주세요';
+  })();
+</script>
+</body>
+</html>
